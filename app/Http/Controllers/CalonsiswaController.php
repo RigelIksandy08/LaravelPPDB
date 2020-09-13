@@ -39,7 +39,9 @@ class CalonsiswaController extends Controller
         $calonsiswa->nohp = $validateData['nohp'];
         $calonsiswa->save();
 
-        return "Data Berhasil Disimpan";
+        // return "Data Berhasil Disimpan";
+        $request->session()->flash('pesan', "Data Telah Berhasil Di Tambahkan, Data {$validateData['nama']}");
+        return redirect()->route('calonsiswa.indexcalonsiswa');
     }
 
     public function show($calonsiswa)
@@ -47,5 +49,31 @@ class CalonsiswaController extends Controller
         // dd($calonsiswa);
         $result = Calonsiswa::find($calonsiswa);
         return view('detail_siswa', ['calonsiswa' => $result]);
+    }
+
+    public function delete(Calonsiswa $calonsiswa)
+    {
+        $calonsiswa->delete();
+        return redirect()->route('calonsiswa.indexcalonsiswa')->with('pesan', "Hapus Data $calonsiswa->nama berhasil");
+    }
+    public function viewform(Calonsiswa $calonsiswa)
+    {
+        // dd($calonsiswa);
+        return view('form-edit', ['calonsiswa' => $calonsiswa]);
+    }
+    public function prosesEdit(Request $request, Calonsiswa $calonsiswa)
+    {
+        $validateData = $request->validate([
+            'noppdb' => 'required|size:10',
+            'nama' => 'required|min:3|max:60',
+            'asal_sekolah' => 'required',
+            'pilihan1' => 'required',
+            'pilihan2' => 'required',
+            'alamat' => 'required',
+            'nohp' => ''
+        ]);
+
+        Calonsiswa::where('id', $calonsiswa->id)->update($validateData);
+        return redirect()->route('calonsiswa.indexcalonsiswa')->with('pesan', "Data Berhasil Diubah {$validateData['nama']}");
     }
 }

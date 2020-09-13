@@ -20,6 +20,9 @@
         <div class="row">
             <h2>Tabel Data Calon Siswa</h2>
         </div>
+        @if(session()->has('pesan'))
+        <div class="alert alert-success">{{ session()->get('pesan') }}</div>
+        @endif
         <table class="table">
             <tr>
                 <td>No</td>
@@ -39,7 +42,14 @@
                 <td>{{ $itemSiswa->asal_sekolah }}</td>
                 <td>{{ $itemSiswa->pilihan1 }}</td>
                 <td>{{ $itemSiswa->pilihan2 }}</td>
-                <td><a href='{{ url("calonsiswa/$itemSiswa->id") }}'>Detail</a></td>
+                <td>
+                    <a href='{{ url("calonsiswa/$itemSiswa->id") }}'>
+                        <button class="btn btn-primary">Detail</button>
+                    </a>
+                    <a href='{{ url("hapussiswa/$itemSiswa->id")}}'>
+                        <button class="btn btn-danger">Hapus</button>
+                    </a>
+                </td>
             </tr>
             @empty
             <td colspan="7">Tidak Ada Data</td>
@@ -47,10 +57,7 @@
 
         </table>
 
-        <button class="btn btn-primary">
-            Tambah Data
-            <a href='url("calonsiswa/create")'></a>
-        </button>
+        <a href="{{ url('calonsiswa/create')}}" class="btn btn-success">Tambah Data</a>
     </div>
 </body>
 <!-- Latest compiled JavaScript -->
